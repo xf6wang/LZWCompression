@@ -1,26 +1,33 @@
 ﻿#include "Dictionary.h"
 
-/* OPTIMIZATIONS:
- * All optimzations are done in the storage of data. The core compression algorithm is efficient. The most expensive operations are in the search and insertion of entries
- * In the non-optimized manner, the ADT is simply a linked list. Insertion is a push operation so it is O(1) however the lookup is much more costly. On average, lookup is O(N)
- * but for the LZW algorithm, it must be ensured at each dictionary entry is unique. Thus, when searching for the longest string that is not in the dictionary, the list must 
- * be traversed a number of times including one time where the entire list is traversed to ensure the entry does not exist. This is done quite frequently and as the dictionary 
- * becomes larger due to more entry insertions, the lookup time is extremely expensive. 
- *
- * Optimization 1: Binary Tree for encoding
- * Storing the dictionary entires as a Binary Tree rather than a linked list reduces the lookup time but increases the insertion time.
- * However, given how costly the lookup is for a linked list, the increased insertion times are welcome. This binary tree is unqiue in that due to the way
- * the intial dictionary was inserted, it begins effectively as a splay tree rather and a balanced BST. However, after running emperical tests, balancing the intial dictionary 
- * does not have large benefits due to the overall number of entries. Thus, since no balancing was done, we can think of this tree as a linked list of binary trees!
- * Why? The inital splay tree is effectively a linked list. Now we take an entry (ie. "He") we traverse until we hit "H" at which point we go one further (strcmp("H", "He") will be  < 0) 
- * because a character is valued higher than a null character. We get to "I" where we find "He" is less than "I" and thus inserted. The next time something (ie."Hel") approaches,
- * it will reach the "He" node and be appended. We can see that as the number of entries increases (given large text and image documents they will be fairly random) we effectively have a small BST for
- * each ASCII character, a linked list of binary trees! Lookup is much faster because we only need to look at 1/256 of the dictionary entries in one go (actually less because each BST can be traversed quickly as well)
- * Now, both lookup and insertion are Θ(log n) operations. This reduces the encoding time from hours to under 1 second. 
- *
- * Optimization 2: Frequency analysis of doubly linked list for decoding 
- * 
- */
+/* All optimizations are done in the storage of data.The core compression algorithm is efficient.The most expensive operations are in the search and insertion of entries
+* In the non - optimized manner, the ADT is simply a linked list.Insertion is a push operation so it is O(1) however the lookup is much more costly.On average, lookup is O(N)
+* but for the LZW algorithm, it must be ensured at each dictionary entry is unique.Thus, when searching for the longest string that is not in the dictionary, the list must
+* be traversed a number of times including one time where the entire list is traversed to ensure the entry does not exist.This is done quite frequently and as the dictionary
+* becomes larger due to more entry insertions, the lookup time is extremely expensive.
+*
+* Optimization 1: Binary Tree for encoding
+* Storing the dictionary entries as a Binary Tree rather than a linked list reduces the lookup time but increases the insertion time.
+* However, given how costly the lookup is for a linked list, the increased insertion times are welcome.This binary tree is unique in that due to the way
+* The initial dictionary was inserted, it begins effectively as a splay tree rather and a balanced BST.However, after running empirical tests, balancing the initial dictionary
+* does not have large benefits due to the overall number of entries.Thus, since no balancing was done, we can think of this tree as a linked list of binary trees!
+* Why ? The initial splay tree is effectively a linked list.Now we take an entry(ie. "He") we traverse until we hit "H" at which point we go one further(strcmp("H", "He") will be  < 0)
+* because a character is valued higher than a null character.We get to "I" where we find "He" is less than "I" and thus inserted.The next time something(ie."Hel") approaches,
+*it will reach the "He" node and be appended.We can see that as the number of entries increases(given large text and image documents they will be fairly random) we effectively have a small BST for
+* each ASCII character, a linked list of binary trees!Lookup is much faster because we only need to look at 1 / 256 of the dictionary entries in one go(actually less because each BST can be traversed quickly as well)
+* Now, both lookup and insertion are Θ(log n) operations.This reduces the encoding time from hours to under 1 second for a 1 MB file.
+*
+* Optimization 2: Frequency analysis of doubly linked list for decoding
+* This idea was taken from a Masters student at the University of Beijing.The concept is to move entries that are more commonly used to the front of the list.Thus, the lookup time
+* should be decreased.However, this is still not as efficient as using a Binary Tree because the entire dictionary must still be traversed to verify that an entry does not exist.
+* Because of this, as the dictionary becomes larger, the speed suffers.So why do this rather than use another Binary Tree.Consider, we have an array of numbers(the result of encoding)
+* From this we must look in the dictionary to find the corresponding string.If the BST is created based on strings we still have to traverse the entire tree to determine if an entry exists
+* or not.If we sort based on the number, every additional entry is incrementally one larger.Thus, we would effectively create a linked list anyways.With this in mind we will create a linked
+* list which cannot be avoided in the decoding process but attempt to optimize it with strategic placement of dictionary entries.Every time a dictionary entry is accessed, we increment its usage and
+* determine whether or not it has passed a certain threshold.If so, we insert it to the front of the list in the appropriate location.We set the threshold to be 90 % of the most frequently used
+* entry.We sort the top 10 % of the entries and insert new entries just behind the threshold.This optimization reduces the runtime for a 1 MB file from 8 min to approximately 1 min.
+* Not as good as the binary tree but better than a regular linked list.Admittedly, the decoding time is not very desirable compared to the encoding time.
+*/
 
 
 Dictionary::Dictionary(ADT structure)
