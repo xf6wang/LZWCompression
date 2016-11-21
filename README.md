@@ -1,7 +1,5 @@
-
-
 # LZWCompression
-A lossles data compression tool written in C++ that implements the Lempel–Ziv–Welch algorithm. 
+A lossless data compression tool written in C++ that implements the Lempel–Ziv–Welch algorithm. 
 
 Algorithm: The idea is to map character sequences to a number equivalent. Intially, the dictionary is comprised of 256 single, 8 bit characters; the ASCII values. The input stream is parsed until the largest character sequence that has not been mapped to any dictionary entry is found. Then, a new entry and mapping (code, value pair) is created and inserted into the dictionary. As the dictionary begins to increment in size, the compression becomes more powerful as inreasingly larger sequences are able to be compressed. The result sequence is parsed and decompressed using its own dictionary. An additional entry is inserted each time a result is decoded, namely the concationation of the decoded symbol and the first character of the subsquently decoded symbol. (There is a cScSc situation where the second symbol does not map to any dictionary entry whereby the concationation becomes the decoded symbol appended with its own first character) The decoded dictionary exactly mirrors the dictionary created in the encoding process, allowing for lossless compression and decompression.
 
