@@ -1,3 +1,5 @@
+
+
 # LZWCompression
 A lossles data compression tool written in C++ that implements the Lempel–Ziv–Welch algorithm. 
 
@@ -12,5 +14,8 @@ Optimization 2: Frequency analysis of doubly linked list for decoding
 This idea of frequency analysis was taken from Fengyuan Zhang, an Associate Professor at the University of Beijing. The concept is to move entries that are more commonly used to the front of the list. Thus, the lookup time should be decreased if there large number of queries. However, this is still not as efficient as using a Binary Tree because the entire dictionary must still be traversed to verify that an entry does not exist. Because of this, as the dictionary becomes larger, the speed suffers. So why do this rather than use another Binary Tree? Consider, we have an sequence of codes (the result of encoding) from this we must look in the dictionary to find the corresponding mapping. If the BST is created based on the value mappings we still have to traverse the entire tree to lookup the mapping for a code. If we sort based on the number, every additional entry is incrementally one larger. Thus, we would effectively create a linked list anyways. With this in mind we will create a linked list which cannot be avoided in the decoding process but attempt to optimize it with strategic placement of dictionary entries. Every time a dictionary entry is accessed, we increment its usage and assess whether or not it has passed a certain threshold. If so, we insert it to the front of the list in the appropriate location. We sort the top 10 % of the entries and insert new entries just behind the threshold.This optimization reduces the runtime for a 1 MB file from 8 min to approximately 1 min. Not as good as the binary tree but better than a regular linked list.Admittedly, the decoding time is not very desirable compared to the encoding time.
 
 TODO: 
-Image and Video compression with the help of Boost libraries
-Implement BST in the decoding process by periodically balancing the splay tree
+
+Image and Video compression with the help of Boost libraries.
+
+Implement BST in the decoding process by periodically balancing the splay tree.
+
