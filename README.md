@@ -13,7 +13,7 @@ This idea of frequency analysis was taken from Fengyuan Zhang, an Associate Prof
 
 TODO: 
 
-Image and Video compression with the help of Boost libraries.
+Image and Video compression with the help of OpenCV and Boost libraries.
 
 Implement BST in the decoding process by periodically balancing the splay tree.
 
