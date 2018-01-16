@@ -1,13 +1,8 @@
-#include "Decoder.h"
+#include "decoder.h"
 
-Decoder::Decoder(const char *inputFile, const char *outputFile)
+Decoder::Decoder()
 {
 	dic = Dictionary(dic.e_LinkedList); //must store file as linked list for decoding
-	dic.initalizeDictionary();
-	inFile = inputFile;
-	outFile = outputFile;
-	numEntries = 256; //offset to account for initial dictionary ASCII inputs
-	ofs = ofstream(outputFile, ios::app);
 }
 
 void Decoder::readFile()
@@ -37,8 +32,14 @@ int Decoder::fileSize() {
 	return size;
 }
 
-void Decoder::decode()
+void Decoder::decode(const char *inputFile, const char *outputFile)
 {
+	dic.initalizeDictionary();
+	inFile = inputFile;
+	outFile = outputFile;
+	numEntries = 256; //offset to account for initial dictionary ASCII inputs
+	ofs = ofstream(outputFile, ios::app);
+	
 	readFile();
 	int cur, next = 0;
 	cur = codes[0];

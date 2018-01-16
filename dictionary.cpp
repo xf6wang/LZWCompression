@@ -1,4 +1,4 @@
-#include "Dictionary.h"
+#include "dictionary.h"
 
 Dictionary::Dictionary(ADT structure)
 {
@@ -8,7 +8,7 @@ Dictionary::Dictionary(ADT structure)
 	ch[0] = char(0);
 	ch[1] = '\0';
 
-	entry *head = (entry*)malloc(sizeof(entry));
+	Entry *head = (Entry*)malloc(sizeof(Entry));
 	root = head;
 	root->code = 0;
 	root->frequency = 1;
@@ -19,17 +19,17 @@ Dictionary::Dictionary(ADT structure)
 	threshold = 1000;
 }
 
-/*Empty Default constuctor - Constructor should be called with ADT specified */
+/* Empty Default constuctor - Constructor should be called with ADT specified */
 Dictionary::Dictionary() {}
 
 void Dictionary::put(char* key, int value, ADT structure)
 {
-	//Allcoate memory for the dictionary entry and intialize variables
+	//Allcoate memory for the dictionary Entry and intialize variables
 	char * copy = (char*)malloc(sizeof(char) * strlen(key) + 1);
 	strcpy(copy, key);
 	copy[strlen(key)] = '\0';
 
-	entry *nEntry = (entry*)malloc(sizeof(entry));
+	Entry *nEntry = (Entry*)malloc(sizeof(Entry));
 	nEntry->str = copy;
 	nEntry->code = value;
 	nEntry->frequency = 1;
@@ -39,7 +39,7 @@ void Dictionary::put(char* key, int value, ADT structure)
 	insert(nEntry, root, structure);
 }
 
-void Dictionary::insert(entry *node, entry *parent, ADT structure) {
+void Dictionary::insert(Entry *node, Entry *parent, ADT structure) {
 	if (parent == NULL) return; //insertion to NULL will cause segmantation issues
 	if (structure == e_BinaryTree) { // if a binary tree, recursively parse the tree and insert as a BST
 		if (strcmp(node->str, parent->str) > 0) {
@@ -63,13 +63,13 @@ void Dictionary::insert(entry *node, entry *parent, ADT structure) {
 			}
 		}
 		else {
-			//For debug purposes - based on the algorithm the same entry should never be reinserted
+			//For debug purposes - based on the algorithm the same Entry should never be reinserted
 			cout << "ERROR: REINSERT" << endl;
 		}
 	}
 	else if (structure == e_LinkedList) { //structure as doubly linked list - insert acts as a push function to first node below the threshold
 		numEntries++;
-		entry *pt = root; //if a linked list we iterate through rather than look recursively
+		Entry *pt = root; //if a linked list we iterate through rather than look recursively
 		while (pt != NULL) {
 			if (pt->frequency < threshold || pt->frequency < node->frequency) { //conditions for insert at earliest postition
 				break;
@@ -107,7 +107,7 @@ void Dictionary::putInitial(char key, int value)
 	put(ch, value, style);
 }
 
-int Dictionary::getfromChar(char* key, entry *parent)
+int Dictionary::getfromChar(char* key, Entry *parent)
 {
 	//regular recursive traversal of binary tree
 	if (parent == NULL) return -1; //not found
@@ -122,13 +122,13 @@ int Dictionary::getfromChar(char* key, entry *parent)
 	}
 }
 
-char* Dictionary::getfromInt(int key, entry *parent) //lookup as doubly linked list with frequency analysis
+char* Dictionary::getfromInt(int key, Entry *parent) //lookup as doubly linked list with frequency analysis
 {
 	//all linked list traversals done are iterative
-	entry *pt = root;
+	Entry *pt = root;
 	while (pt != NULL) {
 		if (pt->code == key) {
-			pt->frequency++; //update entry usage frequency
+			pt->frequency++; //update Entry usage frequency
 			if (pt->frequency > threshold) {
 				if (pt->frequency / threshold > 3) { //update threshold once max is 3 time larger than current threshold
 					threshold = pt->frequency * 0.9; //reoffset threshold 
@@ -162,7 +162,7 @@ char* Dictionary::getfromInt(int key, entry *parent) //lookup as doubly linked l
 	return '\0'; //interger not found
 }
 
-bool Dictionary::has_key(char* key, entry *parent)
+bool Dictionary::has_key(char* key, Entry *parent)
 {
 	//regular binary tree traversal
 	if (parent == NULL) return false; //not found
@@ -177,14 +177,50 @@ bool Dictionary::has_key(char* key, entry *parent)
 	}
 }
 
+void Dictionary::reset ( Entry* head )
+{
+	if(head == NULL) return;
+	if(style == e_LinkedList)
+	{
+		Entry* toDelete = head;
+		Entry* nextDelete;
+		while( toDelete )
+		{
+			nextDelete = toDelete->right;
+			free(toDelete);
+			toDelete = nextDelete;
+		}
+	}
+	else if(style == e_BinaryTree)
+	{
+		if(head)
+		{
+			if(head->right) reset(head->right);
+			if(head->left) 	reset(head->left);
+			free(head);
+		}
+	}
+	else
+	{
+		cerr << "ADT not specified for dictionary" << endl;
+	}
+	numEntries = 0;
+}
+
+
 void Dictionary::initalizeDictionary() {
+	/* Empty dictionary if necessary */
+	if(numEntries != 0)
+	{
+		reset();
+	}
 	for (int i = 1; i < 256; ++i)
 		putInitial(char(i), i);
 }
 
 void Dictionary::printList() { //use for debug
 	//Print list - if used with Binary Tree ADT... i dunno what will happen 
-	entry * pt = root;
+	Entry * pt = root;
 	while (pt != NULL) {
 		cout << pt->str << " " << pt->code << endl;
 		pt = pt->right;

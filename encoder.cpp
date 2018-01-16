@@ -1,12 +1,8 @@
 #include "Encoder.h"
 
-Encoder::Encoder(const char* inName, const char* outName)
+Encoder::Encoder()
 {
 	dic = Dictionary(dic.e_BinaryTree);
-	dic.initalizeDictionary();
-	inputName = inName;
-	outputName = outName;
-	numEntries = 256;
 }
 
 void Encoder::readFile()
@@ -27,8 +23,13 @@ void Encoder::readFile()
 	cout << "FILE READ" << endl;
 }
 
-void Encoder::encode()
+void Encoder::encode(const char* inName, const char* outName)
 {
+	dic.initalizeDictionary();
+	inputName = inName;
+	outputName = outName;
+	numEntries = 256;
+	
 	readFile();
 	int i = 0;
 	char cur[BUFFER_LIMIT];
