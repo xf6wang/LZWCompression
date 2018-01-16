@@ -14,7 +14,7 @@ public:
 	 * Structure for binary tree and linked list 
 	 * Different pointer logic but same struct
 	 */
-	typedef struct Entry {
+	struct Entry {
 		char * str;
 		int code;
 		int frequency;

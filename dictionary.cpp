@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <cstring>
 #include "dictionary.h"
 
 Dictionary::Dictionary(ADT structure)
@@ -212,7 +214,7 @@ void Dictionary::initalizeDictionary() {
 	/* Empty dictionary if necessary */
 	if(numEntries != 0)
 	{
-		reset();
+		reset( root );
 	}
 	for (int i = 1; i < 256; ++i)
 		putInitial(char(i), i);
