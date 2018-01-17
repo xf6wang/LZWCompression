@@ -1,18 +1,24 @@
 # LZWCompression
 A lossless data compression tool written in C++ that implements the Lempel–Ziv–Welch algorithm. 
 
-##Build
+## Build
+'''
 git clone *repository*
 cd LZWCompression
-make 
+make
+''' 
 
 encoder and decoder can be built individually:
+'''
 make encoder 
 make decoder 
+'''
 
-##Run
+## Run
+'''
 ./encode sample.txt output.bin
 ./decode output.bin result.txt
+'''
 
-##Algorithms & Optimizations
+## Algorithms & Optimizations
 An explaination of the algorithm and forward moving entries using frequency analysis can be found on xf6wang.github.io
