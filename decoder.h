@@ -25,8 +25,6 @@ private:
 	int *codes; 			/* codes from binary file */
 	const char *inFile; 	/* input file name */
 	const char *outFile; 	/* output file name */
-	
-	ofstream ofs; 			/* stream for reading in binary file */
 
 	/**
 	 * Opens inFile and determines the number of bytes stored in the file 

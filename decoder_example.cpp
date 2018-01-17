@@ -13,8 +13,8 @@ int main( int argc, char** argv ) {
 	if(argc != 3)
 		cerr << "Error: not enough arguements" << endl;
 	
-	Decoder d = Decoder(argv[1], argv[2]);
-	d.decode();	
+	Decoder d = Decoder();
+	d.decode(argv[1], argv[2]);	
 
 	cout << "Successfully decoded " << endl;
 	return 0;

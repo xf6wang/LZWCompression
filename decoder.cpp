@@ -1,3 +1,5 @@
+#include <cstdlib>
+#include <cstring>
 #include "decoder.h"
 
 Decoder::Decoder()
@@ -38,7 +40,7 @@ void Decoder::decode(const char *inputFile, const char *outputFile)
 	inFile = inputFile;
 	outFile = outputFile;
 	numEntries = 256; //offset to account for initial dictionary ASCII inputs
-	ofs = ofstream(outputFile, ios::app);
+	ofstream ofs(outputFile, ios::app);
 	
 	readFile();
 	int cur, next = 0;

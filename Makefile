@@ -1,13 +1,14 @@
-all:
-	g++ -o dictionary.o dictionary.cpp
-	g++ encode encoder.cpp dictionary.o
-	g++ decode decoder.cpp dictionary.o
+ENCODER='encode'
+DECODER='decode'
 
+all:
+	make encoder
+	make decoder
 encoder:
-	g++ encode encoder.cpp dictionary.o
+	g++ -o $(ENCODER) encoder_example.cpp encoder.cpp dictionary.cpp
 	
 decoder:
-	g++ decode decoder.cpp dictionary.o
+	g++ -o $(DECODER) decoder_example.cpp decoder.cpp dictionary.cpp
 	
 clean:
-	rm *.o encode decode
+	rm $(ENCODER) $(DECODER) *.bin 

@@ -30,6 +30,8 @@ public:
 		e_LinkedList 			/* doubly linked list */
 	};
 
+	Entry *root; 				/* first entry */
+
 	Dictionary( void );
 	Dictionary( ADT structure );
 
@@ -63,7 +65,6 @@ private:
 	int numEntries; 			
 	ADT style; 					/* 0 if to be stored as a binary tree 1 if to be stored as a doubly linked list */
 
-	Entry *root; 				/* first entry */
 	
 	/**
    	 * Insert an Entry into the dictionary - caller must allocate memory 

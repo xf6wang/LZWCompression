@@ -1,4 +1,4 @@
-#include "Encoder.h"
+#include "encoder.h"
 
 Encoder::Encoder()
 {
